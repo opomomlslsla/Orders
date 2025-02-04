@@ -17,5 +17,12 @@ public sealed class Context(DbContextOptions<Context> options) : DbContext(optio
     {
         modelBuilder.Entity<Cart>().OwnsMany(c => c.Products);
         modelBuilder.Entity<Order>().OwnsMany(o => o.OrderItems);
+
+        modelBuilder.Entity<User>().HasData(new User {
+            Id = Guid.Parse("58dd8e45-25cc-4a25-b6b5-3e250e17d3d8"),
+            Login = "Admin",
+            Password = "Password",
+            Role = Domain.Enums.Role.Manager
+        });
     }
 }

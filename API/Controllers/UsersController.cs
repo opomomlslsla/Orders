@@ -3,7 +3,7 @@ using Application.Commands.Users;
 using Application.DTO;
 using Application.Queries.Users;
 using Domain.Interfaces;
-using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -20,20 +20,22 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterCommand registrationCommand)
     {
         var result = await dispatcher.DispatchCommandAsync<RegisterCommand, Result<UserDTO>>(registrationCommand);
         return Ok(result);
     }
-    
+    [Authorize(Roles ="admin")]
     [HttpGet("filterword={filter}")]
-    public async Task<IActionResult> Get(string? filter)
+    public async Task<IActionResult> Get(string? filter = null)
     {
         var result = await dispatcher.DispatchQueryAsync<GetUsersQuery, Result<List<UserDTO>>>(new GetUsersQuery(filter));
         return Ok(result);
     }
 
+    [Authorize(Roles ="admin")]
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
@@ -41,6 +43,7 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles ="admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -48,6 +51,7 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles ="admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, UpdateUserCommand updateUserCommand)
     {

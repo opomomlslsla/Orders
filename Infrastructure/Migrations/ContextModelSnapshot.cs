@@ -139,6 +139,15 @@ namespace Infrastructure.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("58dd8e45-25cc-4a25-b6b5-3e250e17d3d8"),
+                            Login = "Admin",
+                            Password = "Password",
+                            Role = 0
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Cart", b =>

@@ -3,6 +3,7 @@ using Application.Commands.Carts;
 using Application.DTO;
 using Application.Queries.Carts;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -11,6 +12,7 @@ namespace API.Controllers;
 [ApiController]
 public class CartsController(IDispatcher dispatcher) : ControllerBase
 {
+    [Authorize(Roles = "user")]
     [HttpGet("customerid={id}")]
     public async Task<IActionResult> Get(Guid id)
     {
@@ -18,6 +20,7 @@ public class CartsController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "user")]
     [HttpPost]
     public async Task<IActionResult> AddToCart(AddToCartCommand command)
     {
@@ -25,6 +28,7 @@ public class CartsController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "user")]
     [HttpDelete]
     public async Task<IActionResult> RemoveFromCart(RemoveFromCartCommand command)
     {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -150,6 +150,11 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CustomerId", "Login", "Password", "Role" },
+                values: new object[] { new Guid("58dd8e45-25cc-4a25-b6b5-3e250e17d3d8"), null, "Admin", "Password", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartProduct_ProductId",

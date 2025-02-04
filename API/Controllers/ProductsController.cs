@@ -3,6 +3,7 @@ using Application.Commands.Products;
 using Application.DTO;
 using Application.Queries.Products;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -11,20 +12,23 @@ namespace API.Controllers;
 [ApiController]
 public class ProductsController(IDispatcher dispatcher) : ControllerBase
 {
+    [Authorize(Roles = "admin,user")]
     [HttpGet("pages/{page}")]
     public async Task<IActionResult> Get(int page, int pageSize, List<string> categories)
     {
         var result = await dispatcher.DispatchQueryAsync<GetProductsQuery,Result<List<ProductDTO>>>(new GetProductsQuery(page, pageSize, categories));
         return Ok(result);
     }
-    
+
+    [Authorize(Roles = "admin,user")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSingle(Guid id)
     {
         var result = await dispatcher.DispatchQueryAsync<GetProductQuery,Result<ProductDTO>>(new GetProductQuery(id));
         return Ok(result);
     }
-
+    
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -32,6 +36,7 @@ public class ProductsController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, UpdateProductCommand command)
     {
@@ -39,6 +44,7 @@ public class ProductsController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPost]
     public async Task<IActionResult> Create(AddProductCommand command)
     {

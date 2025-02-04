@@ -3,6 +3,7 @@ using Application.Commands.Orders;
 using Application.DTO;
 using Application.Queries.Orders;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -11,6 +12,7 @@ namespace API.Controllers;
 [ApiController]
 public class OrdersController(IDispatcher dispatcher) : ControllerBase
 {
+    [Authorize(Roles = "user")]
     [HttpGet("cusomerid={id}")]
     public async Task<IActionResult> Get(Guid id)
     {
@@ -18,6 +20,7 @@ public class OrdersController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "user")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -25,6 +28,7 @@ public class OrdersController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPut("confirm/id={id}")]
     public async Task<IActionResult> Confirm(Guid id)
     {
@@ -32,6 +36,7 @@ public class OrdersController(IDispatcher dispatcher) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "user")]
     [HttpPost]
     public async Task<IActionResult> Create(AddOrderCommand addOrderCommand)
     {
