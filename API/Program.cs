@@ -56,8 +56,6 @@ builder.Host.UseSerilog((context, services, configuration) =>
 
 var app = builder.Build();
 
-app.UseCors("any");
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -71,6 +69,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCors("any");
 
 app.MapControllers();
 

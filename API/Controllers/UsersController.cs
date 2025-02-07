@@ -19,8 +19,8 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
         if (result.Value != null) HttpContext.Response.Cookies.Append("tasty-token", result.Value);
         return Ok(result);
     }
-
-
+    
+    [Authorize(Roles ="admin")]
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterCommand registrationCommand)
     {
