@@ -12,7 +12,7 @@ public class GetUserQueryHandler(UnitOfWork unitOfWork) : IQueryHandler<GetUserQ
         var user = await unitOfWork.UserRepository.FirstAsync(x => x.Id == query.Id, u => u.Customer);
         if (user == null)
         {
-            return new Result<UserDTO>(null, false, $"User with id: {query.Id} not found");
+            return new Result<UserDTO>(null, false, $"User with id: {query.Id} not found", 404);
         }
         return new Result<UserDTO>(user.Adapt<UserDTO>(), true, $"User with id: {query.Id} found");
     }

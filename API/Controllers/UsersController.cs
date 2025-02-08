@@ -17,7 +17,7 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
     {
         var result = await dispatcher.DispatchQueryAsync<LoginQuery,Result<string>>(loginQuery);
         if (result.Value != null) HttpContext.Response.Cookies.Append("tasty-token", result.Value);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
     
     [Authorize(Roles ="admin")]
@@ -25,14 +25,14 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Register(RegisterCommand registrationCommand)
     {
         var result = await dispatcher.DispatchCommandAsync<RegisterCommand, Result<UserDTO>>(registrationCommand);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
     [Authorize(Roles ="admin")]
     [HttpGet("filterword={filter}")]
     public async Task<IActionResult> Get(string? filter = null)
     {
         var result = await dispatcher.DispatchQueryAsync<GetUsersQuery, Result<List<UserDTO>>>(new GetUsersQuery(filter));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles ="admin")]
@@ -40,7 +40,7 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Get(Guid id)
     {
         var result = await dispatcher.DispatchQueryAsync<GetUserQuery, Result<UserDTO>>(new GetUserQuery(id));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles ="admin")]
@@ -48,7 +48,7 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = await dispatcher.DispatchCommandAsync<DeleteUserCommand, Result<string>>(new DeleteUserCommand(id));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles ="admin")]
@@ -56,6 +56,6 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Update(Guid id, UpdateUserCommand updateUserCommand)
     {
         var result = await dispatcher.DispatchCommandAsync<UpdateUserCommand, Result<UserDTO>>(updateUserCommand);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 }

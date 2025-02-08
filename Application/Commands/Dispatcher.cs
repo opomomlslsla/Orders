@@ -14,7 +14,8 @@ public class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
         {
             throw new InvalidOperationException($"No handler found for command type {typeof(TCommand).Name}");
         }
-        return await handler.HandleAsync(command);
+        var res = await handler.HandleAsync(command);
+        return res;
     }
 
     public async Task<TResult> DispatchQueryAsync<TQuery, TResult>(TQuery query) where TQuery : IQuery

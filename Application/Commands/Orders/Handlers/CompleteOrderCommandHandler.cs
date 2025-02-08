@@ -10,7 +10,7 @@ public class CompleteOrderCommandHandler(UnitOfWork unitOfWork) : ICommandHandle
     {
         var order = await unitOfWork.OrderRepository.FirstAsync(x => x.Id == command.OrderId);
         if(order == null)
-            return new Result<string>("fail", false,"ho order has beeb found by given Id");
+            return new Result<string>("fail", false,"ho order has been found by given Id", 404);
         order.Status = OrderStatus.Done;
         unitOfWork.OrderRepository.Update(order);
         await unitOfWork.SaveChangesAsync();

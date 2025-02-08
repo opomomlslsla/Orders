@@ -11,7 +11,7 @@ public class GetProductQueryHandler(UnitOfWork unitOfWork) : IQueryHandler<GetPr
     {
         var result = await unitOfWork.ProductRepository.FirstAsync(p => p.Id == query.Id);
         if(result == null)
-            return new Result<ProductDTO>(null, false, "Product not found");
+            return new Result<ProductDTO>(null, false, "Product not found", 404);
         return new Result<ProductDTO>(result.Adapt<ProductDTO>(), true, "Product found");
     }
 }

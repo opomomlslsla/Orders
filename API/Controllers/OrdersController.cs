@@ -17,7 +17,7 @@ public class OrdersController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Get(Guid id)
     {
         var result = await dispatcher.DispatchQueryAsync<GetMyOrdersQuery, Result<List<OrderDTO>>>(new(id));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles = "user")]
@@ -25,7 +25,7 @@ public class OrdersController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = await dispatcher.DispatchCommandAsync<DeleteOrderCommand,Result<string>>(new(id));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles = "admin")]
@@ -33,7 +33,7 @@ public class OrdersController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Confirm(Guid id)
     {
         var result = await dispatcher.DispatchCommandAsync<ConfirmOrderCommand,Result<Guid>>(new ConfirmOrderCommand(id));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles = "user")]
@@ -41,6 +41,6 @@ public class OrdersController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Create(AddOrderCommand addOrderCommand)
     {
         var result = await dispatcher.DispatchCommandAsync<AddOrderCommand, Result<OrderDTO>>(addOrderCommand);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 }

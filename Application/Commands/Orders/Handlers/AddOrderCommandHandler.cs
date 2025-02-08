@@ -14,7 +14,7 @@ public class AddOrderCommandHandler(UnitOfWork unitOfWork) : ICommandHandler<Add
     {
         var custumer = await unitOfWork.CustomerRepository.FirstAsync(x => x.Id == command.CustomerId);
         if (custumer == null)
-            return new Result<OrderDTO>(null, false, "User not found, can not add no one's order right?");
+            return new Result<OrderDTO>(null, false, "User not found, can not add no one's order right?", 404);
         var cart = await unitOfWork.CartRepository.FirstAsync(x => x.CustomerId == custumer.Id);
         
         var orderItems = cart!.Products.Select(p => new OrderItem()

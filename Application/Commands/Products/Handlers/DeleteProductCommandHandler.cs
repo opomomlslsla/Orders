@@ -8,9 +8,9 @@ public class DeleteProductCommandHandler(UnitOfWork unitOfWork) : ICommandHandle
     public async Task<Result<string>> HandleAsync(DeleteProductCommand command)
     {
         var product = await unitOfWork.ProductRepository.FirstAsync(x => x.Id == command.ProductId);
-        if(product != null)
-            return new Result<string>("success", true, "product deleted");
+        if(product == null)
+            return new Result<string>("fail", false, "Product not found",404);
         await unitOfWork.SaveChangesAsync();
-        return new Result<string>("fail", false, "Product not found");
+        return new Result<string>("success", true, "product deleted");
     }
 }

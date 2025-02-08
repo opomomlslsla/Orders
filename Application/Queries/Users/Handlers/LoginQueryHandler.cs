@@ -18,9 +18,9 @@ public class LoginQueryHandler(UnitOfWork unitOfWork, IJWTProvider jwtProvider, 
         
         var user = await unitOfWork.UserRepository.FirstAsync(u => query.Login == u.Login);
         if (user == null)
-            return new Result<string>("fail", false, "cant't find user with the given login");
+            return new Result<string>("fail", false, "cant't find user with the given login", 404);
         if(user.Password != query.Password)
-            return new Result<string>("fail", false, $"password or login is incorrect.");
+            return new Result<string>("fail", false, $"password or login is incorrect.", 400);
         var token = jwtProvider.GenerateToken(user);
         return new Result<string>(token, true, "success");
     }

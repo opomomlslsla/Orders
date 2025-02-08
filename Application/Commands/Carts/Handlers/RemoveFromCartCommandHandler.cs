@@ -17,12 +17,12 @@ public class RemoveFromCartCommandHandler(UnitOfWork unitOfWork, IValidator<Remo
         
         var cart = await unitOfWork.CartRepository.FirstAsync(c => c.CustomerId == command.CustomerId);
         if (cart == null)
-            return new Result<string>("Fail", false, "Cannot find cart");
+            return new Result<string>("Fail", false, "Cannot find cart", 404);
         var cartProduct = cart.Products.FirstOrDefault(cp => cp.ProductId == command.ProductId);
         cartProduct.Quatity -= command.Quantity;
         
         if (cartProduct.Quatity < 0) 
-            return new Result<string>("Fail", false, "Cart has less Items than requested to delete");
+            return new Result<string>("Fail", false, "Cart has less Items than requested to delete", 400);
         
         unitOfWork.CartRepository.Update(cart);
         await unitOfWork.SaveChangesAsync();

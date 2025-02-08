@@ -17,7 +17,7 @@ public class ProductsController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Get(int page, int pageSize, List<string> categories)
     {
         var result = await dispatcher.DispatchQueryAsync<GetProductsQuery,Result<List<ProductDTO>>>(new GetProductsQuery(page, pageSize, categories));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles = "admin,user")]
@@ -25,7 +25,7 @@ public class ProductsController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> GetSingle(Guid id)
     {
         var result = await dispatcher.DispatchQueryAsync<GetProductQuery,Result<ProductDTO>>(new GetProductQuery(id));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
     
     [Authorize(Roles = "admin")]
@@ -33,7 +33,7 @@ public class ProductsController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = await dispatcher.DispatchCommandAsync<DeleteProductCommand,Result<string>>(new DeleteProductCommand(id));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles = "admin")]
@@ -41,7 +41,7 @@ public class ProductsController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Update(Guid id, UpdateProductCommand command)
     {
         var result = await dispatcher.DispatchCommandAsync<UpdateProductCommand,Result<ProductDTO>>(command);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles = "admin")]
@@ -49,7 +49,7 @@ public class ProductsController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Create(AddProductCommand command)
     {
         var result = await dispatcher.DispatchCommandAsync<AddProductCommand,Result<ProductDTO>>(command);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 }
 

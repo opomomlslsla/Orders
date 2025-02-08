@@ -11,7 +11,7 @@ public class GerMyCartQueryHandler(UnitOfWork unitOfWork) : IQueryHandler<GetMyC
     {
         var cart = await unitOfWork.CartRepository.FirstAsync(x => x.Id == query.CustomerId);
         if (cart == null)
-            return new Result<CartDTO>(null, false, $"Can't find cart for user with id: {query.CustomerId}");
+            return new Result<CartDTO>(null, false, $"Can't find cart for user with id: {query.CustomerId}", 404);
         return new Result<CartDTO>(cart.Adapt<CartDTO>(), true, "cart");
     }
 }

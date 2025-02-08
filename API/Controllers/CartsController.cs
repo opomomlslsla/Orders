@@ -17,7 +17,7 @@ public class CartsController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> Get(Guid id)
     {
         var result = await dispatcher.DispatchQueryAsync<GetMyCartQuery,Result<CartDTO>>(new (id));
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles = "user")]
@@ -25,7 +25,7 @@ public class CartsController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> AddToCart(AddToCartCommand command)
     {
         var result = await dispatcher.DispatchCommandAsync<AddToCartCommand, Result<string>>(command);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
     [Authorize(Roles = "user")]
@@ -33,6 +33,6 @@ public class CartsController(IDispatcher dispatcher) : ControllerBase
     public async Task<IActionResult> RemoveFromCart(RemoveFromCartCommand command)
     {
         var result = await dispatcher.DispatchCommandAsync<RemoveFromCartCommand, Result<string>>(command);
-        return Ok(result);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 }

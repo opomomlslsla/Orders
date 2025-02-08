@@ -17,7 +17,7 @@ internal class RegisterCommandHandler(UnitOfWork unitOfWork, IJWTProvider jwtPro
         if (!validation.IsValid)
         {
             var errors = validation.Errors.Select(x => x.ErrorMessage).ToArray();
-            return new Result<UserDTO>(null, false, "Validation Failed " + string.Join("\n",errors));
+            return new Result<UserDTO>(null, false, "Validation Failed " + string.Join("\n",errors),400);
         }
         var user = new User
         {
@@ -29,7 +29,7 @@ internal class RegisterCommandHandler(UnitOfWork unitOfWork, IJWTProvider jwtPro
         if (command.Role?.ToLower() == "Manager")
         {
             await unitOfWork.UserRepository.AddAsync(user);
-            return new Result<UserDTO>(user.Adapt<UserDTO>(), false, "admin user added successfully");
+            return new Result<UserDTO>(user.Adapt<UserDTO>(), false, "admin user has been added successfully");
         }
         var customer = new Customer
         {
@@ -47,7 +47,7 @@ internal class RegisterCommandHandler(UnitOfWork unitOfWork, IJWTProvider jwtPro
         await unitOfWork.CartRepository.AddAsync(cart);
         await unitOfWork.SaveChangesAsync();
         var token = jwtProvider.GenerateToken(user);
-        return new Result<UserDTO>(user.Adapt<UserDTO>(), false, "admin user added successfully");
+        return new Result<UserDTO>(user.Adapt<UserDTO>(), false, "user has been added successfully");
     }
 
 }

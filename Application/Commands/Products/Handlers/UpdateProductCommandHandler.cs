@@ -11,7 +11,7 @@ public class UpdateProductCommandHandler(UnitOfWork unitOfWork) : ICommandHandle
     {
         var product = await unitOfWork.ProductRepository.FirstAsync(x => x.Id == command.Id); 
         if (product == null)
-            return new Result<ProductDTO>(null, false,$"Product with id {command.Id} does not exist");
+            return new Result<ProductDTO>(null, false,$"Product with id {command.Id} does not exist", 404);
         product.Name = command.Name;
         product.Price = command.Price;
         product.Category = command.Category;

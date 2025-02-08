@@ -11,7 +11,7 @@ public class UpdateUserCommandHandler(UnitOfWork unitOfWork) : ICommandHandler<U
     {
         var user = await unitOfWork.UserRepository.FirstAsync(x => x.Id == command.UserId, u => u.Customer);
         if (user == null)
-            return new Result<UserDTO>(null, false, "не удалось найти пользователя");
+            return new Result<UserDTO>(null, false, "can't find user", 404);
         user.Password = command.Password ?? user.Password;
         user.Login = command.Login ?? user.Login;
         var customer = user.Customer;
@@ -23,6 +23,6 @@ public class UpdateUserCommandHandler(UnitOfWork unitOfWork) : ICommandHandler<U
         }
         unitOfWork.UserRepository.Update(user);
         await unitOfWork.SaveChangesAsync();
-        return new Result<UserDTO>(user.Adapt<UserDTO>(), true, "пользователь успешно обновлен");
+        return new Result<UserDTO>(user.Adapt<UserDTO>(), true, "user updated");
     }
 }

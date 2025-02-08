@@ -10,9 +10,9 @@ public class DeleteOrderCommandHandler(UnitOfWork unitOfWork) : ICommandHandler<
     {
         var order = await unitOfWork.OrderRepository.FirstAsync(x => x.Id == command.OrderId);
         if(order == null)
-            return new Result<string>("fail", false, "no order have been found by given Id");
+            return new Result<string>("fail", false, "no order have been found by given Id",404);
         if(order.Status != OrderStatus.New)
-            return new Result<string>("fail", false, "order has already been confirmed");
+            return new Result<string>("fail", false, "order has already been confirmed",400);
         unitOfWork.OrderRepository.Delete(order);
         await unitOfWork.SaveChangesAsync();
         return new Result<string>("success", true, "order has been deleted");

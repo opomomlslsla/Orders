@@ -10,7 +10,7 @@ public class DeleteUserCommandHandler(UnitOfWork unitOfWork) : ICommandHandler<D
     {
         var user = await unitOfWork.UserRepository.FirstAsync(x => x.Id == command.UserId);
         if (user == null)
-            return new Result<string>("fail", false, $"no users have been found by given Id : {user.Id}");
+            return new Result<string>("fail", false, $"no users have been found by given Id : {command.UserId}", 404);
         var customer = user.Role != Role.Manager ? await unitOfWork.CustomerRepository.FirstAsync(x=> x.Id == user.CustomerId) : null;
         if(customer != null)
             unitOfWork.CustomerRepository.Delete(customer);
