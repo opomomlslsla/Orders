@@ -12,8 +12,16 @@ namespace API.Controllers;
 [ApiController]
 public class OrdersController(IDispatcher dispatcher) : ControllerBase
 {
-    [Authorize(Roles = "user")]
-    [HttpGet("cusomerid={id}")]
+    [Authorize(Roles = "admin")]
+    [HttpGet("/{pageNumber}/{statusFilter}")]
+    public async Task<IActionResult> GetAll(int pageNumber, int pageSize, string? statusFilter)
+    {
+        var result = await dispatcher.DispatchQueryAsync<GetOrdersQuery, Result<List<OrderDTO>>>(new GetOrdersQuery(pageNumber, pageSize, statusFilter));
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+    
+    [Authorize(Roles = "user,admin")]
+    [HttpGet("customerid={id}")]
     public async Task<IActionResult> Get(Guid id)
     {
         var result = await dispatcher.DispatchQueryAsync<GetMyOrdersQuery, Result<List<OrderDTO>>>(new(id));

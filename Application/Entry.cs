@@ -50,11 +50,14 @@ public  static class Entry
         services.AddScoped<IQueryHandler<GetUserQuery, Result<UserDTO>>, GetUserQueryHandler>();
         services.AddScoped<IQueryHandler<GetUsersQuery, Result<List<UserDTO>>>, GetUsersQueryHandler>();
         services.AddScoped<IQueryHandler<LoginQuery, Result<string>>, LoginQueryHandler>();
+        services.AddScoped<IQueryHandler<GetOrdersQuery, Result<List<OrderDTO>>>, GetOrdersQueryHandler>();
         services.AddScoped<IDispatcher, Dispatcher>();
         services.AddScoped<IValidator<AddToCartCommand>, AddToCartCommandValidator>();
         services.AddScoped<IValidator<RemoveFromCartCommand>, RemoveFromCartCommandValidator>();
         services.AddScoped<IValidator<RegisterCommand>, RegisterCommandValidator>();
         services.AddScoped<IValidator<LoginQuery>, LoginQueryValidation>();
+        services.AddScoped<IValidator<GetOrdersQuery>, GetOrdersQueryValidator>();
+        services.AddScoped<IValidator<GetProductsQuery>, GetProductsQueryValidator>();
         return services;
     }
 }

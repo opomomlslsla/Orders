@@ -13,10 +13,11 @@ namespace API.Controllers;
 public class ProductsController(IDispatcher dispatcher) : ControllerBase
 {
     [Authorize(Roles = "admin,user")]
-    [HttpGet("pages/{page}")]
-    public async Task<IActionResult> Get(int page, int pageSize, List<string> categories)
+    [HttpGet("page-number=/{page}/page-size={pageSize}")]
+    public async Task<IActionResult> Get(int page, int pageSize, string? categories)
     {
-        var result = await dispatcher.DispatchQueryAsync<GetProductsQuery,Result<List<ProductDTO>>>(new GetProductsQuery(page, pageSize, categories));
+        var categoruList = categories is not null ? categories.Split("&").ToList() : null;
+        var result = await dispatcher.DispatchQueryAsync<GetProductsQuery,Result<List<ProductDTO>>>(new GetProductsQuery(page, pageSize, categoruList));
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
