@@ -22,7 +22,7 @@ public class GetProductsQueryHanldler(UnitOfWork unitOfWork, IValidator<GetProdu
         var queryable = unitOfWork.ProductRepository.GetQuery()
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize);
-        if (query.Categories is not null && query.Categories.Any())
+        if (query.Categories is null || !query.Categories.Any())
         {
             result = await queryable.ToListAsync();
             return new Result<List<ProductDTO>>(result.Adapt<List<ProductDTO>>(), true, "success");

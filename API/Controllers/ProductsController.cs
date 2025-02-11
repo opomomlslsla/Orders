@@ -13,7 +13,7 @@ namespace API.Controllers;
 public class ProductsController(IDispatcher dispatcher) : ControllerBase
 {
     [Authorize(Roles = "admin,user")]
-    [HttpGet("page-number=/{page}/page-size={pageSize}")]
+    [HttpGet("page-number={page}/page-size={pageSize}")]
     public async Task<IActionResult> Get(int page, int pageSize, string? categories)
     {
         var categoruList = categories is not null ? categories.Split("&").ToList() : null;

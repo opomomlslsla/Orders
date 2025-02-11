@@ -49,7 +49,7 @@ public  static class Entry
         services.AddScoped<IQueryHandler<GetProductQuery, Result<ProductDTO>>, GetProductQueryHandler>();
         services.AddScoped<IQueryHandler<GetUserQuery, Result<UserDTO>>, GetUserQueryHandler>();
         services.AddScoped<IQueryHandler<GetUsersQuery, Result<List<UserDTO>>>, GetUsersQueryHandler>();
-        services.AddScoped<IQueryHandler<LoginQuery, Result<string>>, LoginQueryHandler>();
+        services.AddScoped<IQueryHandler<LoginQuery, Result<LoginDTO>>, LoginQueryHandler>();
         services.AddScoped<IQueryHandler<GetOrdersQuery, Result<List<OrderDTO>>>, GetOrdersQueryHandler>();
         services.AddScoped<IDispatcher, Dispatcher>();
         services.AddScoped<IValidator<AddToCartCommand>, AddToCartCommandValidator>();

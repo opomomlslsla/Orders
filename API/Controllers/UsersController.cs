@@ -15,8 +15,8 @@ public class UsersController(IDispatcher dispatcher) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginQuery loginQuery)
     {
-        var result = await dispatcher.DispatchQueryAsync<LoginQuery,Result<string>>(loginQuery);
-        if (result.Value != null) HttpContext.Response.Cookies.Append("tasty-token", result.Value);
+        var result = await dispatcher.DispatchQueryAsync<LoginQuery,Result<LoginDTO>>(loginQuery);
+        if (result.Value != null) HttpContext.Response.Cookies.Append("tasty-token", result.Value.Token);
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
     
