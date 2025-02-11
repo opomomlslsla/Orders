@@ -10,6 +10,7 @@ public class DeleteProductCommandHandler(UnitOfWork unitOfWork) : ICommandHandle
         var product = await unitOfWork.ProductRepository.FirstAsync(x => x.Id == command.ProductId);
         if(product == null)
             return new Result<string>("fail", false, "Product not found",404);
+        unitOfWork.ProductRepository.Delete(product);
         await unitOfWork.SaveChangesAsync();
         return new Result<string>("success", true, "product deleted");
     }
